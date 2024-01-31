@@ -1,16 +1,25 @@
 package com.db.squaremile;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.aop.ObservedAspect;
 
 @Configuration
 @EnableAspectJAutoProxy
 public class ObservedAspectConfig {
+	
+	@Bean
+	MeterRegistryCustomizer<MeterRegistry> configurer(
+	    @Value("${spring.application.name}") String applicationName) {
+	    return (registry) -> registry.config().commonTags("application", applicationName);
+	}
 
 	@Bean
 	public ObservedAspect observedAspect(ObservationRegistry observationRegistry) {

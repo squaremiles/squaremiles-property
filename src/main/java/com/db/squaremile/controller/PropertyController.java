@@ -31,8 +31,7 @@ public class PropertyController {
 	
 	
 	@PostMapping(value = "/property",consumes =MediaType.APPLICATION_JSON_VALUE)
-	//@Observed(name = "post.property" )
-	
+	@Observed(name = "post.property.controller" )	
 	public ResponseEntity<Property> postProperty( @RequestBody Property property){
 		return new ResponseEntity<Property>(propertyService.postProperty(property),HttpStatus.OK);
 	}

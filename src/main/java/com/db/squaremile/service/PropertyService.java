@@ -23,13 +23,16 @@ public class PropertyService {
 	
 	@Autowired
 	private PropertyRepo propertyRepo;
-	//@ContinueSpan
+	
 	@Observed(name = "post.property.service",contextualName ="postProperty",lowCardinalityKeyValues = {"property-value","plot"})
-	//@Timed(value = "post.property.timed")
 	public Property postProperty(@SpanTag(value = "property") Property property) {
 		log.info("Calling repo ...");
 		property=propertyRepo.save(property);
-		notificationService.notify(propertyRepo.save(property));
+		try {
+		notificationService.notify(property);
+		}catch(Exception e) {
+			log.error("error durring calling web service ",e);
+		}
 		return property;
 		
 	}
